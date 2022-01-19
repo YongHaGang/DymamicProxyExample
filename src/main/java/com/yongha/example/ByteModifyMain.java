@@ -13,7 +13,7 @@ public class ByteModifyMain {
         try {
             new ByteBuddy().redefine(ByteModify.class)
                     .method(named("getString")).intercept(FixedValue.value("bye"))
-                    .make().saveIn(new File("D:\\workspace\\retorifit\\DynamicProxyExample\\build\\classes\\java\\main"));
+                    .make().saveIn(new File("build\\classes\\java\\main"));
         } catch (IOException e) {
             e.printStackTrace();
         }

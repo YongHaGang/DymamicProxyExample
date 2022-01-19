@@ -1,5 +1,6 @@
 package com.yongha.example;
 
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import java.lang.annotation.Annotation;
@@ -20,27 +21,18 @@ class DynamicProxyTest {
                     @Override
                     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
                         boolean haveMyAnnotation = false;
-                        if (args != null) {
-                            for (Object object : args) {
-                                System.out.println(object);
+                        for (Annotation annotation :method.getAnnotations()) {
+                            if (annotation instanceof MyAnnotation) {
+                                haveMyAnnotation = true;
                             }
                         }
-                        if (method.getAnnotations() != null) {
-                            for (Annotation annotation :method.getAnnotations()) {
-                                System.out.println(annotation.annotationType());
-                                if (annotation instanceof MyAnnotation) {
-                                    haveMyAnnotation = true;
-                                }
-                            }
-                        }
-                        System.out.println("invoke method=" + method.getName() + " haveMyAnnotation=" + haveMyAnnotation);
+                        System.out.println("invoke method=" + method.getName() + " haveMyAnnotation=" + haveMyAnnotation
+                            + (args != null ? " arg=" + args[0] : ""));
                         return 1;
                     }
                 }
         );
-
-        int value = dynamicProxy.hello();
-        System.out.println("value=" + value);
+        dynamicProxy.hello();
         dynamicProxy.hello(111);
         dynamicProxy.hi();
         dynamicProxy.bye();
